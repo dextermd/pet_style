@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "938733879715",
+    "project_id": "pet-style-md",
+    "storage_bucket": "pet-style-md.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938733879715:android:0943f44517cc61a9d19a16",
+        "android_client_info": {
+          "package_name": "dev.dextermd.petstyle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id":"938733879715-j865hniii3d110iersv0ld8vbjsd7qq0.apps.googleusercontent.com",
+          "project_id":"pet-style-md","auth_uri":"https://accounts.google.com/o/oauth2/auth",
+          "token_uri":"https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS0nex8fjyYv_VYcRPSWrAjtnJzCKGaIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938733879715-e4dfd9q997lfu6apvpkb50hu535jdgrs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.dextermd.petstyle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
