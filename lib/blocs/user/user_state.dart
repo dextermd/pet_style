@@ -2,7 +2,7 @@ part of 'user_bloc.dart';
 
 sealed class UserState extends Equatable {
   const UserState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -13,10 +13,11 @@ final class UserLoading extends UserState {}
 
 final class UserLoaded extends UserState {
   final User user;
-  const UserLoaded(this.user);
+  final List<Pet> pets;
+  const UserLoaded(this.user, this.pets);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, pets];
 }
 
 final class UserError extends UserState {

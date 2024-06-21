@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
 import 'package:pet_style/blocs/network_bloc/network_bloc.dart';
+import 'package:pet_style/blocs/user/user_bloc.dart';
 import 'package:pet_style/core/helpers/log_helpers.dart';
 import 'package:pet_style/core/theme/colors.dart';
-import 'package:pet_style/domain/repository/user_repository.dart';
 import 'package:pet_style/view/app/home/widgets/appointment_card.dart';
 import 'package:pet_style/view/app/home/widgets/pet_card.dart';
 import 'package:pet_style/view/widget/dialog_box.dart';
@@ -21,8 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    GetIt.I<UserRepository>().getUserData();
-    BlocProvider.of<NetworkBloc>(context).add(CheckNetworkConnection());
+    BlocProvider.of<UserBloc>(context).add(FetchUserData());
   }
 
   @override
@@ -38,99 +36,144 @@ class _HomeScreenState extends State<HomeScreen> {
           showDialogBox(context);
         }
       },
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            backgroundColor: AppColors.primarySecondElement,
-            elevation: 1,
-            title: Text(
-              'P E T  S T Y L E',
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.containerBorder,
-                letterSpacing: 1.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () {
-                    logDebug('Click Profile Pic');
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'assets/images/default_profile.png',
-                      width: 40,
-                      fit: BoxFit.cover,
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is UserError) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+          if (state is UserLoaded) {
+            logDebug('Pets: ${state.pets}');
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  snap: true,
+                  floating: true,
+                  backgroundColor: AppColors.primarySecondElement,
+                  elevation: 1,
+                  title: Text(
+                    'P E T  S T Y L E',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryText,
+                      letterSpacing: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SliverPadding(
+                  padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppointmentCard(
+                          title: 'Запись в салон',
+                          subtitle: 'Премиум уход для вашего любимца',
+                          imageLeft: Image(
+                            image: AssetImage('assets/images/salon2.png'),
+                            height: 30,
+                            width: 30,
+                          ),
+                          imageRight: Image(
+                            image: AssetImage('assets/images/pet1.png'),
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        AppointmentCard(
+                          title: 'Запись домой',
+                          subtitle: 'Индивидуальный уход у груммера дома',
+                          imageLeft: Image(
+                            image: AssetImage('assets/images/paw-print.png'),
+                            height: 30,
+                            width: 30,
+                          ),
+                          imageRight: Image(
+                            image: AssetImage('assets/images/pet2.png'),
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-          const SliverPadding(
-            padding: EdgeInsets.all(16.0),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  AppointmentCard(
-                    backgroundColor: AppColors.containerColor,
-                    icon: Icons.business,
-                    title: 'Запись в салон',
-                    subtitle: 'Премиум уход для вашего любимца',
-                    iconColor: AppColors.primaryText,
-                    textColor: AppColors.primaryText,
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.pets,
+                          color: AppColors.primaryElement,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Мои питомцы',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primaryElement
+                                  ),
+                        ),
+                        const Expanded(
+                          child: Divider(
+                            thickness: 2,
+                            color: AppColors.primaryElement,
+                            indent: 10,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  AppointmentCard(
-                    backgroundColor: AppColors.containerColor,
-                    icon: Icons.home_work,
-                    title: 'Запись домой',
-                    subtitle: 'Индивидуальный уход у груммера дома',
-                    iconColor: AppColors.primaryText,
-                    textColor: AppColors.primaryText,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-              child: Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              'Мои питомцы',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          )),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 130,
-              child: ListView.separated(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                scrollDirection: Axis.horizontal,
-                itemCount: 2 + 1,
-                separatorBuilder: (context, index) => const SizedBox(
-                  width: 16,
                 ),
-                itemBuilder: (context, index) {
-                  if (index == 2) {
-                    return const AddPetCard();
-                  } else {
-                    return const PetCard(width: 130);
-                  }
-                },
-              ),
-            ),
-          ),
-        ],
+                const SliverToBoxAdapter(child: SizedBox(height: 5)),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 100,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.pets.length + 1,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 16,
+                      ),
+                      itemBuilder: (context, index) {
+                        if (index == state.pets.length) {
+                          return const AddPetCard();
+                        } else {
+                          return PetCard(
+                            width: 250,
+                            name: state.pets[index].name ?? '',
+                            photo: state.pets[index].photo ?? '',
+                            isNetworkImage: true,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          // Добавляем return на случай, если ни одно условие не выполнится
+          return const Center(
+            child: Text('Unknown state'),
+          );
+        },
       ),
     );
   }

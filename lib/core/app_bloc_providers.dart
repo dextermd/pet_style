@@ -23,7 +23,7 @@ class AppBlocProviders {
             lazy: true,
             create: (context) => UserBloc(GetIt.I<UserRepository>())),
         BlocProvider<NetworkBloc>(
-            lazy: true,
+            lazy: false,
             create: (context) => NetworkBloc(connectionChecker:  InternetConnection())),
       ];
 }

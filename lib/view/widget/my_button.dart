@@ -15,7 +15,7 @@ class MyButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.color = AppColors.containerBorder,
-    this.textColor = AppColors.primarySecondBackground,
+    this.textColor = AppColors.whiteText,
     this.borderColor = AppColors.primaryTransparent,
     required this.width,
   });
@@ -47,7 +47,7 @@ class MyButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor,
-              fontSize: 16.sp,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
           ),

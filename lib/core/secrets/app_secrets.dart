@@ -12,4 +12,5 @@ class AppSecrets {
 
   // Users
   static const String meUrl = "$baseUrl/users/me";
+
 }

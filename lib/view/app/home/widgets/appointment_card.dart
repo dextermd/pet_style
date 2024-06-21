@@ -1,79 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
 class AppointmentCard extends StatelessWidget {
-  final Color backgroundColor;
-  final IconData icon;
   final String title;
   final String subtitle;
-  final Color iconColor;
-  final Color textColor;
+  final Image imageLeft;
+  final Image imageRight;
 
   const AppointmentCard({
     super.key,
-    required this.backgroundColor,
-    required this.icon,
     required this.title,
     required this.subtitle,
-    required this.iconColor,
-    required this.textColor,
+    required this.imageLeft,
+    required this.imageRight,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      elevation: 1,
-      shadowColor: AppColors.containerBorder,
+    return Expanded(
       child: Container(
-        width: 150,
-        height: 150,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          gradient: const LinearGradient(
-            colors: [
-              AppColors.containerBorder,
-              AppColors.containerColor,
-            ],
-            stops: [0.0, 1.0],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Container(
-          margin: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: const EdgeInsets.all(6.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: iconColor, size: 30.h),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+            borderRadius: BorderRadius.circular(10.0),
+            color: AppColors.containerColor.withOpacity(0.2)),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(child: imageLeft),
+                Flexible(child: imageRight),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(
+                color: AppColors.primaryText,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 8),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 11.sp,
-                ),
+            ),
+            Text(
+              subtitle,
+              style: TextStyle(
+                color: AppColors.primaryText.withOpacity(0.5),
+                fontSize: 12,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            // add elevation button
+            Center(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryElement,
+                  foregroundColor: AppColors.primaryLinkText,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text('Записаться',
+                    style: TextStyle(fontSize: 14, color: AppColors.whiteText)),
+              ),
+            ),
+          ],
         ),
       ),
     );

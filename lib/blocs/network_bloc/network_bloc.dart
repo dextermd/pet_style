@@ -21,11 +21,9 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
       }
     });
     connectionChecker.onStatusChange.listen((status) {
-      if (status == InternetStatus.connected) {
-        add(CheckNetworkConnection());
-      } else {
-        emit(NetworkDisconnected());
-      }
+      add(CheckNetworkConnection());
     });
+
+   
   }
 }

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pet_style/core/theme/colors.dart';
 import 'package:pet_style/view/widget/base_container.dart';
+import 'package:pet_style/view/widget/t_rounded_image.dart';
 
 class PetCard extends StatelessWidget {
+  final String photo;
+  final String name;
+  final bool isNetworkImage;
+
   const PetCard({
     super.key,
     required this.width,
+    required this.photo,
+    required this.name,
+    required this.isNetworkImage,
   });
 
   final double width;
@@ -14,15 +22,84 @@ class PetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseContainer(
       width: width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/petp.jpeg'),
-          ),
-          
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TRoundedImage(
+                  width: 100,
+                  height: 100,
+                  imageUrl: photo,
+                  applyImageRadius: true,
+                  isNetworkImage: isNetworkImage,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, right: 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              color: AppColors.primaryText,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            '2 года',
+                            style: TextStyle(
+                              color: AppColors.primaryText.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Метис',
+                            style: TextStyle(
+                              color: AppColors.primaryText.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.containerBorder,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: const SizedBox(
+                          height: 36,
+                          width: 36,
+                          child: Icon(
+                            Icons.edit,
+                            color: AppColors.whiteText,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -33,17 +110,32 @@ class AddPetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 130,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(
-            width: 1,
-            color: AppColors.primaryHintText,
-            style: BorderStyle.solid),
-      ),
-      child: const Center(
-        child: Icon(Icons.add_circle_rounded),
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        width: 130,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: AppColors.containerColor.withOpacity(0.2),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/pet-care.png'),
+            const SizedBox(height: 5),
+            Text(
+              'Добавить питомца',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.primaryText.withOpacity(0.7),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

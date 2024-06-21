@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_style/core/theme/colors.dart';
 
 class BaseContainer extends StatelessWidget {
   const BaseContainer({
@@ -20,6 +21,11 @@ class BaseContainer extends StatelessWidget {
       width: width,
       height: height,
       margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: AppColors.containerColor.withOpacity(0.2),
+      ),
+      //padding: const EdgeInsets.only(left: 10),
       child: child,
     );
   }

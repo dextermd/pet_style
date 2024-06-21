@@ -27,10 +27,10 @@ class DependencyInjector {
     _getIt.registerLazySingleton<UserRepository>(
         () => UserRepositoryImpl(dio: dio));
 
-    _getIt.registerLazySingleton<InternetConnection>(
-        () => InternetConnection());
+    _getIt
+        .registerLazySingleton<InternetConnection>(() => InternetConnection());
 
-    dio.interceptors.add(AuthInterceptor(dio: dio));
+     dio.interceptors.add(AuthInterceptor(dio: dio));
   }
 
   static T get<T extends Object>() {

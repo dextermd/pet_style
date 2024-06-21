@@ -20,21 +20,6 @@ class AuthInterceptor implements InterceptorsWrapper {
   @override
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {    
-    // final networkBloc = context.read<NetworkBloc>();
-    // networkBloc.add(CheckNetworkConnection());
-
-    // final hasConnection = await connectionChecker.hasInternetAccess;
-    // if (!hasConnection) {
-    //   logDebug('No internet connection');
-    //   return handler.reject(
-    //     DioException(
-    //       requestOptions: options,
-    //       error: 'No internet connection',
-    //     ),
-    //   );
-    // } else {
-    //   logDebug('Internet connection is available');
-    // }
 
     final accessToken =
         StorageServices.getString(AppConstants.STORAGE_ACCESS_TOKEN);

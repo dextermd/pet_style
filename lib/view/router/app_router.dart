@@ -45,11 +45,6 @@ class AppRouter {
         ],
       ),
       GoRoute(
-        path: '/setting',
-        name: 'setting',
-        builder: (context, state) => const SettingScreen(),
-      ),
-      GoRoute(
         path: '/no_internet',
         name: 'no_internet',
         builder: (context, state) => NoInternetScreen(
@@ -79,6 +74,11 @@ class AppRouter {
             name: 'chat',
             parentNavigatorKey: _shellNavigatorKey,
             builder: (context, state) => const ChatScreen(),
+          ),
+          GoRoute(
+            path: '/setting',
+            name: 'setting',
+            builder: (context, state) => const SettingScreen(),
           ),
         ],
       )
