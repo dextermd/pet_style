@@ -36,7 +36,7 @@ class _SettingScreenState extends State<SettingScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.goNamed('home');
+            context.pop();
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
