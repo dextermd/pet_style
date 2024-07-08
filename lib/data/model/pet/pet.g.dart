@@ -8,13 +8,13 @@ part of 'pet.dart';
 
 _$PetImpl _$$PetImplFromJson(Map<String, dynamic> json) => _$PetImpl(
       id: json['id'] as String?,
-      createdAt: json['createdAt'] == null
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
-      photo: json['photo'] as String?,
+          : DateTime.parse(json['updated_at'] as String),
+      photo: json['photo'],
       name: json['name'] as String?,
       type: json['type'] as String?,
       breed: json['breed'] as String?,
@@ -30,8 +30,8 @@ _$PetImpl _$$PetImplFromJson(Map<String, dynamic> json) => _$PetImpl(
 
 Map<String, dynamic> _$$PetImplToJson(_$PetImpl instance) => <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'photo': instance.photo,
       'name': instance.name,
       'type': instance.type,

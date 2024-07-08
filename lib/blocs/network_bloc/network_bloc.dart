@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
 
 part 'network_event.dart';
 part 'network_state.dart';

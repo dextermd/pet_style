@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
 import 'package:pet_style/data/model/auth_response/auth_response.dart';
 import 'package:pet_style/domain/repository/auth_repository.dart';
 

@@ -30,5 +30,21 @@ class AppTheme {
     ),
     splashColor: AppColors.containerBorder.withOpacity(0.1),
     highlightColor: AppColors.containerBorder.withOpacity(0.1),
+    datePickerTheme:   DatePickerThemeData(
+      headerBackgroundColor: AppColors.primarySecondElement,
+      headerForegroundColor: AppColors.primaryText.withOpacity(0.7),
+      backgroundColor: AppColors.primaryBackground,
+      elevation: 1,
+    ),
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primaryText.withOpacity(0.5),
+      onPrimary: Colors.white,
+      onSurface: AppColors.primaryText,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        backgroundColor: AppColors.primarySecondElement.withOpacity(0.2),
+      ),
+    ),
   );
 }

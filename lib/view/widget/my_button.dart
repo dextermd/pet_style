@@ -9,6 +9,7 @@ class MyButton extends StatelessWidget {
   final Color textColor;
   final Color borderColor;
   final double width;
+  final double? fontSize;
 
   const MyButton({
     super.key,
@@ -18,6 +19,7 @@ class MyButton extends StatelessWidget {
     this.textColor = AppColors.whiteText,
     this.borderColor = AppColors.primaryTransparent,
     required this.width,
+    this.fontSize = 16,
   });
 
   @override
@@ -41,13 +43,13 @@ class MyButton extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Text(
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor,
-              fontSize: 16,
+              fontSize: fontSize,
               fontWeight: FontWeight.w600,
             ),
           ),

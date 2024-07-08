@@ -7,9 +7,11 @@ part 'pet.g.dart';
 class Pet with _$Pet {
     const factory Pet({
         String? id,
+        @JsonKey(name: 'created_at')
         DateTime? createdAt,
+        @JsonKey(name: 'updated_at')
         DateTime? updatedAt,
-        String? photo,
+        dynamic photo,
         String? name,
         String? type,
         String? breed,

@@ -8,6 +8,7 @@ import 'package:pet_style/core/theme/colors.dart';
 import 'package:pet_style/view/widget/app_bar_auth.dart';
 import 'package:pet_style/view/widget/my_button.dart';
 import 'package:pet_style/view/widget/my_text_field.dart';
+import 'package:pet_style/view/widget/reusable_text.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -261,26 +262,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ReusableText extends StatelessWidget {
-  final String text;
-
-  const ReusableText({
-    super.key,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5.h),
-      child: Text(
-        text,
-        style: const TextStyle(color: AppColors.primarySecondText),
       ),
     );
   }

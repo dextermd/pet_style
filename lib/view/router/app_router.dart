@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
 import 'package:pet_style/core/services/storage_services.dart';
 import 'package:pet_style/view/app/auth/sign_in/sign_in_screen.dart';
 import 'package:pet_style/view/app/auth/sign_up/sign_up_screen.dart';
 import 'package:pet_style/view/app/chat/chat_screen.dart';
 import 'package:pet_style/view/app/error/no_internet_screen.dart';
+import 'package:pet_style/view/app/pet_form/pet_form_screen.dart';
 import 'package:pet_style/view/app/onboarding/onboarding_screen.dart';
 import 'package:pet_style/view/app/home/home_screen.dart';
 import 'package:pet_style/view/app/menu/bottom_navigation.dart';
@@ -62,6 +63,14 @@ class AppRouter {
             name: 'home',
             parentNavigatorKey: _shellNavigatorKey,
             builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                path: 'pet_form',
+                name: 'pet_form',
+                builder: (context, state) => PetFormScreen(id: state.extra as String?),
+                parentNavigatorKey: _shellNavigatorKey,
+              ),
+            ]
           ),
           GoRoute(
             path: '/schedule',
@@ -92,10 +101,6 @@ class AppRouter {
       if (!isLoggedIn && protectedRoutes.contains(state.matchedLocation)) {
         return '/sign_in';
       }
-
-      // if (!isLoggedIn && state.matchedLocation == '/home') {
-      //   return '/sign_in';
-      // }
 
       if (state.matchedLocation == '/onboarding' && !showOnboarding) {
         logDebug('isLoggedIn $isLoggedIn');

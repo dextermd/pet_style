@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -50,8 +49,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
       '/setting',
     ];
 
-    logDebug('location: $currentUrl');
-    logDebug('hideBottomNavBarPaths: $hideBottomNavBarPaths');
+    // logDebug('location: $currentUrl');
+    // logDebug('hideBottomNavBarPaths: $hideBottomNavBarPaths');
 
     bool shouldShowBottomNavBar = !hideBottomNavBarPaths.contains(currentUrl);
 

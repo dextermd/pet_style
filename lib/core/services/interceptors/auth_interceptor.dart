@@ -1,10 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:pet_style/blocs/network_bloc/network_bloc.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
 import 'package:pet_style/core/services/storage_services.dart';
 import 'package:pet_style/core/values/constants.dart';
 import 'package:pet_style/data/model/auth_response/auth_response.dart';
@@ -19,8 +15,7 @@ class AuthInterceptor implements InterceptorsWrapper {
 
   @override
   Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {    
-
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final accessToken =
         StorageServices.getString(AppConstants.STORAGE_ACCESS_TOKEN);
     if (accessToken != null) {
@@ -49,13 +44,20 @@ class AuthInterceptor implements InterceptorsWrapper {
             await StorageServices.setString(
                 AppConstants.STORAGE_REFRESH_TOKEN, newTokens.refreshToken!);
 
-            err.requestOptions.headers
-                .addAll({'Authorization': '${newTokens.accessToken}'});
-            final opts = Options(method: err.requestOptions.method);
-            final cloneReq = await dio.request(err.requestOptions.path,
-                options: opts,
-                data: err.requestOptions.data,
-                queryParameters: err.requestOptions.queryParameters);
+            final newOptions = Options(
+              method: err.requestOptions.method,
+              headers: {
+                ...err.requestOptions.headers,
+                'Authorization': '${newTokens.accessToken}',
+              },
+            );
+
+            final cloneReq = await dio.request(
+              err.requestOptions.path,
+              options: newOptions,
+              data: err.requestOptions.data,
+              queryParameters: err.requestOptions.queryParameters,
+            );
 
             return handler.resolve(cloneReq);
           }

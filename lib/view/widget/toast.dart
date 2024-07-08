@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
@@ -13,26 +13,25 @@ toastInfo({
     msg: msg,
     toastLength: Toast.LENGTH_LONG,
     gravity: ToastGravity.TOP,
-    timeInSecForIosWeb: 4,
+    timeInSecForIosWeb: 8,
     backgroundColor: backgroundColor,
     textColor: textColor,
-    fontSize: 16.sp,
+    fontSize: 14,
   );
 }
-
 
 toastError({
   required String msg,
   Color backgroundColor = AppColors.primaryStatusError,
-  Color textColor = AppColors.primaryBackground,
+  Color textColor = AppColors.whiteText,
 }) {
   return Fluttertoast.showToast(
     msg: msg,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.TOP,
-    timeInSecForIosWeb: 4,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.CENTER,
+    timeInSecForIosWeb: 8,
     backgroundColor: backgroundColor,
     textColor: textColor,
-    fontSize: 16.sp,
+    fontSize: 14,
   );
 }

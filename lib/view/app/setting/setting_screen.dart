@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_style/blocs/sign_in/sign_in_bloc.dart';
 import 'package:pet_style/core/theme/colors.dart';
+import 'package:pet_style/view/app/menu/app_bar_back.dart';
 import 'package:pet_style/view/widget/my_button.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -33,15 +33,11 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        backgroundColor: AppColors.primarySecondElement,
-        title: const Text('Настройки'),
+      appBar: AppBarBack(
+        onPressed: () {
+          context.pop();
+        },
+        title: 'Настройки',
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -80,9 +76,10 @@ class _SettingScreenState extends State<SettingScreen> {
                 text: 'Edit Profile',
                 onPressed: () {},
               ),
-              SizedBox(height: 30.h),
-              const Divider(),
-              SizedBox(height: 10.h),
+              SizedBox(height: 20.h),
+              const Divider(
+                  color: AppColors.containerBorder, height: 1, thickness: 1),
+              SizedBox(height: 20.h),
               ListTileMenu(
                 title: 'Settings',
                 icon: Icon(Icons.logout,

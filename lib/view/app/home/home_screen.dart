@@ -1,13 +1,16 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_style/blocs/network_bloc/network_bloc.dart';
 import 'package:pet_style/blocs/user/user_bloc.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
 import 'package:pet_style/core/theme/colors.dart';
 import 'package:pet_style/view/app/home/widgets/appointment_card.dart';
 import 'package:pet_style/view/app/home/widgets/pet_card.dart';
+import 'package:pet_style/view/widget/base_container.dart';
 import 'package:pet_style/view/widget/dialog_box.dart';
+import 'package:pet_style/view/widget/t_rounded_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<UserBloc>(context).add(FetchUserData());
+    BlocProvider.of<UserBloc>(context)
+        .add(const FetchUserData(completer: null));
   }
 
   @override
@@ -49,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           if (state is UserLoaded) {
-            logDebug('Pets: ${state.pets}');
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -57,17 +60,68 @@ class _HomeScreenState extends State<HomeScreen> {
                   snap: true,
                   floating: true,
                   backgroundColor: AppColors.primarySecondElement,
-                  elevation: 1,
-                  title: Text(
-                    'P E T  S T Y L E',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primaryText,
-                      letterSpacing: 1.5,
+                  elevation: 0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Привет, ${state.user.name}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.primaryText.withOpacity(0.6),
+                                  letterSpacing: 1.2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: state.user.image != null
+                                  ? NetworkImage(state.user.image ?? '')
+                                  : const AssetImage(
+                                          'assets/images/default_profile.png')
+                                      as ImageProvider),
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                  bottom: const PreferredSize(
+                      preferredSize: Size.fromHeight(50),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        child: Text(
+                          'P E T  S T Y L E',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryText,
+                            letterSpacing: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )),
+                ),
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async {
+                    final completer = Completer();
+                    context
+                        .read<UserBloc>()
+                        .add(FetchUserData(completer: completer));
+                    return completer.future;
+                  },
                 ),
                 const SliverPadding(
                   padding: EdgeInsets.only(top: 10, left: 20, right: 20),
@@ -111,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
+                        horizontal: 20, vertical: 20),
                     child: Row(
                       children: [
                         const Icon(
@@ -122,25 +176,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 10),
                         Text(
                           'Мои питомцы',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primaryElement
-                                  ),
-                        ),
-                        const Expanded(
-                          child: Divider(
-                            thickness: 2,
-                            color: AppColors.primaryElement,
-                            indent: 10,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primaryElement),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 5)),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 100,
@@ -157,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else {
                           return PetCard(
                             width: 250,
+                            id: state.pets[index].id ?? '0',
                             name: state.pets[index].name ?? '',
                             photo: state.pets[index].photo ?? '',
                             isNetworkImage: true,
@@ -166,12 +214,136 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.schedule,
+                          color: AppColors.primaryElement,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Предстоящие записи',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primaryElement),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 120,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.pets.length,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 16,
+                      ),
+                      itemBuilder: (context, index) {
+                        return BaseContainer(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Row(
+                            children: [
+                              TRoundedContainer(
+                                width: 100,
+                                height: 100,
+                                radius: 25,
+                                margin: const EdgeInsets.all(10),
+                                child: Center(
+                                  child: Text(
+                                    '12\nАвгуста',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primaryElement),
+                                  ),
+                                ),
+                              ),
+                              const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Салон красоты',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.primaryElement,
+                                    ),
+                                  ),
+                                  Text(
+                                    '12:00 - 13:00',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.primaryElement,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '12:00 - 13:00',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.primaryElement,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 10,
+                  ),
+                ),
               ],
             );
           }
-          // Добавляем return на случай, если ни одно условие не выполнится
-          return const Center(
-            child: Text('Unknown state'),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Что-то пошло не так',
+                  style: const TextStyle(color: AppColors.primaryText)
+                      .copyWith(fontSize: 16),
+                ),
+                Text(
+                  'Попробуйте чуть позже',
+                  style: const TextStyle(color: AppColors.primaryText)
+                      .copyWith(fontSize: 10),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    BlocProvider.of<UserBloc>(context)
+                        .add(const FetchUserData(completer: null));
+                  },
+                  child: const Text(
+                    'Повторить попытку',
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

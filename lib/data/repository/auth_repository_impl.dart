@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:pet_style/core/helpers/log_helpers.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
 import 'package:pet_style/core/secrets/app_secrets.dart';
 import 'package:pet_style/core/services/storage_services.dart';
 import 'package:pet_style/core/values/constants.dart';

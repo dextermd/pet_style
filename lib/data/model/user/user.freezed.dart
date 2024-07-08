@@ -21,7 +21,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   String? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -45,8 +47,8 @@ abstract class $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       String? name,
       String? email,
       dynamic phone,
@@ -146,8 +148,8 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       String? name,
       String? email,
       dynamic phone,
@@ -240,8 +242,8 @@ class __$$UserImplCopyWithImpl<$Res>
 class _$UserImpl implements _User {
   const _$UserImpl(
       {this.id,
-      this.createdAt,
-      this.updatedAt,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt,
       this.name,
       this.email,
       this.phone,
@@ -260,8 +262,10 @@ class _$UserImpl implements _User {
   @override
   final String? id;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
   @override
   final String? name;
@@ -359,8 +363,8 @@ class _$UserImpl implements _User {
 abstract class _User implements User {
   const factory _User(
       {final String? id,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
       final String? name,
       final String? email,
       final dynamic phone,
@@ -376,8 +380,10 @@ abstract class _User implements User {
   @override
   String? get id;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
   @override
   String? get name;

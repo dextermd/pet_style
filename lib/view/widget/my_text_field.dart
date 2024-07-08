@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
 class MyTextField extends StatelessWidget {
@@ -14,6 +13,10 @@ class MyTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? errorMsg;
   final String? Function(String?)? onChanged;
+  final double contentPadding;
+  final bool readOnly;
+  final int minLines;
+  final int maxLines;
 
   const MyTextField({
     super.key,
@@ -28,6 +31,10 @@ class MyTextField extends StatelessWidget {
     this.focusNode,
     this.errorMsg,
     this.onChanged,
+    this.contentPadding = 18,
+    this.readOnly = false,
+    this.minLines = 1,
+    this.maxLines = 1,
   });
 
   @override
@@ -41,14 +48,24 @@ class MyTextField extends StatelessWidget {
       onTap: onTap,
       textInputAction: TextInputAction.next,
       onChanged: onChanged,
+      readOnly: readOnly,
+      minLines: minLines,
+      maxLines: maxLines,
+      style: const TextStyle(
+        color: AppColors.primaryText,
+        fontSize: 13,
+      ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(18.h),
+        contentPadding: EdgeInsets.all(contentPadding),
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
-        fillColor: AppColors.primarySecondBackground,
+        fillColor: AppColors.containerColor.withOpacity(0.2),
         filled: true,
         hintText: hintText,
-        hintStyle: const TextStyle(color: AppColors.primaryLine),
+        hintStyle: TextStyle(
+          color: AppColors.primaryText.withOpacity(0.5),
+          fontSize: 13,
+        ),
         errorText: errorMsg,
       ),
     );

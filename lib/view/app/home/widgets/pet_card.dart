@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pet_style/core/secrets/app_secrets.dart';
 import 'package:pet_style/core/theme/colors.dart';
 import 'package:pet_style/view/widget/base_container.dart';
 import 'package:pet_style/view/widget/t_rounded_image.dart';
 
 class PetCard extends StatelessWidget {
+  final String id;
   final String photo;
   final String name;
   final bool isNetworkImage;
@@ -13,7 +16,7 @@ class PetCard extends StatelessWidget {
     required this.width,
     required this.photo,
     required this.name,
-    required this.isNetworkImage,
+    required this.isNetworkImage, required this.id,
   });
 
   final double width;
@@ -31,7 +34,7 @@ class PetCard extends StatelessWidget {
                 child: TRoundedImage(
                   width: 100,
                   height: 100,
-                  imageUrl: photo,
+                  imageUrl: '${AppSecrets.baseUrl}/$photo',
                   applyImageRadius: true,
                   isNetworkImage: isNetworkImage,
                 ),
@@ -76,20 +79,25 @@ class PetCard extends StatelessWidget {
                       bottom: 0,
                       right: 0,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.containerBorder,
-                          borderRadius: const BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             bottomRight: Radius.circular(10),
                           ),
                         ),
-                        child: const SizedBox(
-                          height: 36,
-                          width: 36,
-                          child: Icon(
-                            Icons.edit,
-                            color: AppColors.whiteText,
-                            size: 20,
+                        child: GestureDetector(
+                          onTap: () {
+                            context.goNamed('pet_form', extra: id);
+                          },
+                          child: const SizedBox(
+                            height: 36,
+                            width: 36,
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.whiteText,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -111,7 +119,9 @@ class AddPetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.goNamed('pet_form');
+      },
       borderRadius: BorderRadius.circular(10.0),
       child: Container(
         width: 130,
