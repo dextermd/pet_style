@@ -1,16 +1,39 @@
-# pet_style
+# Название проекта
 
-A new Flutter project.
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
 
-## Getting Started
+## Описание
 
-This project is a starting point for a Flutter application.
+> **Дипломная работа.** Этот проект представляет собой мобильное приложение для записи в салон груминга, где клиенты могут регистрироваться, добавлять своих питомцев и бронировать встречи с грумером. Проект разработан в рамках завершения учебы.
 
-A few resources to get you started if this is your first Flutter project:
+## Функциональность
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Регистрация и авторизация пользователей через email, Google и Apple ID
+- Добавление и редактирование профилей питомцев
+- Бронирование встреч
+- Просмотр предстоящих, завершенных и отмененных встреч
+- Настройки профиля пользователя
+- Анимации и удобный пользовательский интерфейс
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Технологии
+
+- **Flutter** - основной фреймворк для разработки мобильного приложения
+- **Dio** - для выполнения HTTP-запросов
+- **Firebase Firestore** - для хранения данных пользователей
+- **NestJS** - для разработки backend-части проекта
+
+## Контакты
+
+Если у вас есть вопросы или предложения, пожалуйста, свяжитесь со мной:
+
+- Email: <dextermdpay@gmail.com>
+- Telegram: @dextermdk
+
+## Лицензия
+
+Этот проект лицензирован под лицензией MIT. Подробности можно найти в файле `LICENSE`.
+
+## Ссылки
+
+- [Backend репозиторий](https://github.com/dextermd/pet-style-backend)
