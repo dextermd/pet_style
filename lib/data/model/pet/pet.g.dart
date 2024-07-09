@@ -14,7 +14,7 @@ _$PetImpl _$$PetImplFromJson(Map<String, dynamic> json) => _$PetImpl(
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
-      photo: json['photo'],
+      photo: json['photo'] as String?,
       name: json['name'] as String?,
       type: json['type'] as String?,
       breed: json['breed'] as String?,

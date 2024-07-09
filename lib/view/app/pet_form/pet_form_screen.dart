@@ -134,7 +134,6 @@ class _PetFormScreenState extends State<PetFormScreen> {
               toastError(msg: state.message);
             }
             if (state is PetLoaded) {
-              petRequired = true;
               final Pet pet = state.pet;
               _nameController.text = pet.name.toString();
               _descController.text = pet.description.toString();
@@ -145,13 +144,44 @@ class _PetFormScreenState extends State<PetFormScreen> {
               _initialDate = pet.birthDate!;
               _dateOfBirthController.text =
                   '${pet.birthDate.toString().substring(8, 10).toString().padLeft(2, '0')}.${pet.birthDate.toString().substring(5, 7).toString().padLeft(2, '0')}.${pet.birthDate.toString().substring(0, 4)}';
+              _selectedDate = pet.birthDate;
               _weightController.text = pet.weight.toString();
               _serverImage = pet.photo;
+              suggestions = _selectedType == _typeValueOptions[0]
+                  ? PetFormState.dogBreedsL
+                      .map(SearchFieldListItem<String>.new)
+                      .toList()
+                  : PetFormState.catBreedsL
+                      .map(SearchFieldListItem<String>.new)
+                      .toList();
             }
             if (state is PetCreateError) {
               toastError(msg: state.message);
+              petRequired = false;
             }
             if (state is PetCreated) {
+              petRequired = false;
+              context.pop();
+              context
+                  .read<UserBloc>()
+                  .add(const FetchUserData(completer: null));
+            }
+            if (state is PetUpdateError) {
+              toastError(msg: state.message);
+              petRequired = false;
+            }
+            if (state is PetUpdated) {
+              petRequired = false;
+              context.pop();
+              context
+                  .read<UserBloc>()
+                  .add(const FetchUserData(completer: null));
+            }
+            if (state is PetDeleteError) {
+              toastError(msg: state.message);
+              petRequired = false;
+            }
+            if (state is PetDeleted) {
               petRequired = false;
               context.pop();
               context
@@ -163,14 +193,17 @@ class _PetFormScreenState extends State<PetFormScreen> {
             builder: (context, state) {
               if (state is PetBreedsLoaded) {
                 suggestions = _selectedType == _typeValueOptions[0]
-                    ? PetFormState.dogBreedsL
+                    ? state.dogBreeds
                         .map(SearchFieldListItem<String>.new)
                         .toList()
-                    : PetFormState.catBreedsL
+                    : state.catBreeds
                         .map(SearchFieldListItem<String>.new)
                         .toList();
               }
               if (state is PetLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is PetBreedsLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SafeArea(
@@ -266,6 +299,16 @@ class _PetFormScreenState extends State<PetFormScreen> {
                                       setState(() {
                                         _selectedType = val;
                                         _breadsController.clear();
+                                        suggestions = _selectedType ==
+                                                _typeValueOptions[0]
+                                            ? PetFormState.dogBreedsL
+                                                .map(SearchFieldListItem<String>
+                                                    .new)
+                                                .toList()
+                                            : PetFormState.catBreedsL
+                                                .map(SearchFieldListItem<String>
+                                                    .new)
+                                                .toList();
                                       });
                                     },
                                   ),
@@ -278,6 +321,16 @@ class _PetFormScreenState extends State<PetFormScreen> {
                                       setState(() {
                                         _selectedType = val;
                                         _breadsController.clear();
+                                        suggestions = _selectedType ==
+                                                _typeValueOptions[0]
+                                            ? PetFormState.dogBreedsL
+                                                .map(SearchFieldListItem<String>
+                                                    .new)
+                                                .toList()
+                                            : PetFormState.catBreedsL
+                                                .map(SearchFieldListItem<String>
+                                                    .new)
+                                                .toList();
                                       });
                                     },
                                   ),
@@ -503,62 +556,77 @@ class _PetFormScreenState extends State<PetFormScreen> {
                                                 behavior: _selectedBehovator,
                                                 birthDate: _selectedDate,
                                               );
-
+                                              petRequired = true;
                                               context.read<PetFormBloc>().add(
                                                     CreatePet(
-                                                        pet: newPet,
-                                                        photo: image!),
+                                                      pet: newPet,
+                                                      photo: image,
+                                                    ),
                                                   );
                                             }
                                           },
                                         )
-                                      : const Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppColors.primaryElement,
-                                          ),
+                                      : Row(
+                                          children: [
+                                            MyButton(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              text: 'Обновить',
+                                              fontSize: 14,
+                                              onPressed: () async {
+                                                if (_formSignUp.currentState!
+                                                    .validate()) {
+                                                  Pet updatedPet = Pet(
+                                                    id: widget.id!,
+                                                    name: _nameController.text,
+                                                    type: _selectedType,
+                                                    breed:
+                                                        _breadsController.text,
+                                                    description:
+                                                        _descController.text,
+                                                    gender: _selectedGender,
+                                                    weight: int.parse(
+                                                      _weightController.text,
+                                                    ),
+                                                    behavior:
+                                                        _selectedBehovator,
+                                                    birthDate: _selectedDate,
+                                                  );
+                                                  petRequired = true;
+                                                  context
+                                                      .read<PetFormBloc>()
+                                                      .add(
+                                                        UpdatePet(
+                                                          pet: updatedPet,
+                                                          photo: image,
+                                                        ),
+                                                      );
+                                                }
+                                              },
+                                            ),
+                                            const SizedBox(width: 10),
+                                            MyButton(
+                                              color:
+                                                  AppColors.primaryStatusError,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              text: 'Удалить',
+                                              fontSize: 14,
+                                              onPressed: () async {
+                                                petRequired = true;
+                                                context.read<PetFormBloc>().add(
+                                                      DeletePet(widget.id!),
+                                                    );
+                                              },
+                                            ),
+                                          ],
                                         )
-                                  : Row(
-                                      children: [
-                                        MyButton(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          text: 'Обновить',
-                                          fontSize: 14,
-                                          onPressed: () async {
-                                            if (_formSignUp.currentState!
-                                                .validate()) {
-                                              Pet newPet = Pet(
-                                                name: _nameController.text,
-                                                type: _selectedType,
-                                                breed: _breadsController.text,
-                                                description:
-                                                    _descController.text,
-                                                gender: _selectedGender,
-                                                weight: int.parse(
-                                                  _weightController.text,
-                                                ),
-                                                behavior: _selectedBehovator,
-                                                birthDate: _selectedDate,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(width: 10),
-                                        MyButton(
-                                          color: AppColors.primaryStatusError,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          text: 'Удалить',
-                                          fontSize: 14,
-                                          onPressed: () async {},
-                                        ),
-                                      ],
-                                    ),
-                              //const Center(child: CircularProgressIndicator()),
+                                  : const Center(
+                                      child: CircularProgressIndicator()),
                               SizedBox(height: 20.h),
                             ],
                           ),

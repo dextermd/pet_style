@@ -61,3 +61,23 @@ class PetBreedsLoadError extends PetFormState {
 
   const PetBreedsLoadError({required this.message});
 }
+
+class PetUpdating extends PetFormState {}
+
+class PetUpdated extends PetFormState {}
+
+class PetUpdateError extends PetFormState {
+  final String message;
+
+  const PetUpdateError({required this.message});
+}
+
+class PetDeleting extends PetFormState {}
+
+class PetDeleted extends PetFormState {}
+
+class PetDeleteError extends PetFormState {
+  final String message;
+
+  const PetDeleteError({required this.message});
+}

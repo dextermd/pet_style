@@ -11,7 +11,7 @@ class Pet with _$Pet {
         DateTime? createdAt,
         @JsonKey(name: 'updated_at')
         DateTime? updatedAt,
-        dynamic photo,
+        String? photo,
         String? name,
         String? type,
         String? breed,

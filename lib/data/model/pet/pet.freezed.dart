@@ -25,7 +25,7 @@ mixin _$Pet {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  dynamic get photo => throw _privateConstructorUsedError;
+  String? get photo => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   String? get breed => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $PetCopyWith<$Res> {
       {String? id,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      dynamic photo,
+      String? photo,
       String? name,
       String? type,
       String? breed,
@@ -104,7 +104,7 @@ class _$PetCopyWithImpl<$Res, $Val extends Pet> implements $PetCopyWith<$Res> {
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -155,7 +155,7 @@ abstract class _$$PetImplCopyWith<$Res> implements $PetCopyWith<$Res> {
       {String? id,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      dynamic photo,
+      String? photo,
       String? name,
       String? type,
       String? breed,
@@ -206,7 +206,7 @@ class __$$PetImplCopyWithImpl<$Res> extends _$PetCopyWithImpl<$Res, _$PetImpl>
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -277,7 +277,7 @@ class _$PetImpl implements _Pet {
   @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
   @override
-  final dynamic photo;
+  final String? photo;
   @override
   final String? name;
   @override
@@ -312,7 +312,7 @@ class _$PetImpl implements _Pet {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality().equals(other.photo, photo) &&
+            (identical(other.photo, photo) || other.photo == photo) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.breed, breed) || other.breed == breed) &&
@@ -334,7 +334,7 @@ class _$PetImpl implements _Pet {
       id,
       createdAt,
       updatedAt,
-      const DeepCollectionEquality().hash(photo),
+      photo,
       name,
       type,
       breed,
@@ -364,7 +364,7 @@ abstract class _Pet implements Pet {
       {final String? id,
       @JsonKey(name: 'created_at') final DateTime? createdAt,
       @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-      final dynamic photo,
+      final String? photo,
       final String? name,
       final String? type,
       final String? breed,
@@ -386,7 +386,7 @@ abstract class _Pet implements Pet {
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
   @override
-  dynamic get photo;
+  String? get photo;
   @override
   String? get name;
   @override

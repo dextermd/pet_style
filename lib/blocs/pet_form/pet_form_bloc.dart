@@ -21,7 +21,12 @@ class PetFormBloc extends Bloc<PetFormEvent, PetFormState> {
           final catBreeds = await petRepository.loadBreeds('cat_breeds.json');
           PetFormState.dogBreedsL = dogBreeds;
           PetFormState.catBreedsL = catBreeds;
-          emit(PetBreedsLoaded(dogBreeds: dogBreeds, catBreeds: catBreeds));
+          if (dogBreeds.isNotEmpty && catBreeds.isNotEmpty) {
+            emit(PetBreedsLoaded(dogBreeds: dogBreeds, catBreeds: catBreeds));
+          } else {
+            emit(const PetBreedsLoadError(
+                message: 'Не удалось загрузить породы животных'));
+          }
         } catch (e, st) {
           logHandle(e.toString(), st);
           emit(PetBreedsLoadError(message: e.toString()));
@@ -33,7 +38,11 @@ class PetFormBloc extends Bloc<PetFormEvent, PetFormState> {
       (event, emit) async {
         emit(PetCreating());
         try {
-          await petRepository.createPet(event.pet, event.photo);
+          if (event.photo == null) {
+            emit(const PetCreateError(message: 'Пожалуйста, добавьте фото питомца'));
+            return;
+          }
+          await petRepository.createPet(event.pet, event.photo!);
           emit(PetCreated());
         } catch (e) {
           logDebug('CreatePet error: $e');
@@ -51,6 +60,32 @@ class PetFormBloc extends Bloc<PetFormEvent, PetFormState> {
         } catch (e) {
           logDebug('LoadPet error: $e');
           emit(PetLoadError(message: e.toString()));
+        }
+      },
+    );
+
+    on<UpdatePet>(
+      (event, emit) async {
+        emit(PetUpdating());
+        try {
+          await petRepository.updatePet(event.pet, event.photo);
+          emit(PetUpdated());
+        } catch (e) {
+          logDebug('UpdatePet error: $e');
+          emit(PetUpdateError(message: e.toString()));
+        }
+      },
+    );
+
+    on<DeletePet>(
+      (event, emit) async {
+        emit(PetDeleting());
+        try {
+          await petRepository.deletePet(event.id);
+          emit(PetDeleted());
+        } catch (e) {
+          logDebug('DeletePet error: $e');
+          emit(PetDeleteError(message: e.toString()));
         }
       },
     );

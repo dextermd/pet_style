@@ -23,8 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<UserBloc>(context)
-        .add(const FetchUserData(completer: null));
+    context.read<UserBloc>().add(const FetchUserData(completer: null));
   }
 
   @override

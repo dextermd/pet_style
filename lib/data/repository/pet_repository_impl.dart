@@ -38,8 +38,10 @@ class PetRepositoryImpl implements PetRepository {
         'description': pet.description,
         'birthDate': pet.birthDate,
         'photo': '',
-        'file': await MultipartFile.fromFile(photo.path,
-            contentType: MediaType('image', memtype)),
+        'file': await MultipartFile.fromFile(
+          photo.path,
+          contentType: MediaType('image', memtype),
+        ),
       });
 
       logDebug('formData: ${formData.fields}');
@@ -85,6 +87,73 @@ class PetRepositoryImpl implements PetRepository {
       }
     } on DioException catch (error) {
       logDebug('getPetById error: $error');
+      throw ApiException.checkException(error);
+    } catch (e, st) {
+      logHandle(e.toString(), st);
+      throw ('Ошибка\nПопробуйте позже');
+    }
+  }
+
+  @override
+  Future<void> updatePet(Pet pet, File? photo) async {
+    String? memtype;
+    logDebug('updatePet photo: $photo');
+    if (photo != null) {
+      memtype = photo.path.split('.').last;
+    }
+    int weight = pet.weight!;
+    String petId = pet.id!;
+
+    try {
+      final formDataMap = {
+        'name': pet.name,
+        'type': pet.type,
+        'breed': pet.breed,
+        'gender': pet.gender,
+        'weight': weight,
+        'behavior': pet.behavior,
+        'description': pet.description,
+        'birthDate': pet.birthDate,
+        'id': pet.id,
+      };
+
+      if (photo != null) {
+        formDataMap['file'] = await MultipartFile.fromFile(photo.path,
+            contentType: MediaType('image', memtype!));
+      }
+
+      final FormData formData = FormData.fromMap(formDataMap);
+
+      logDebug('formData: ${formData.fields}');
+      final Response response = await dio.patch(
+        '${AppSecrets.petsUrl}/$petId',
+        data: formData,
+      );
+      logDebug('updatePet response: ${response.data}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data;
+      } else {
+        throw DioException(
+          requestOptions: RequestOptions(path: AppSecrets.petsUrl),
+          response: response,
+          type: DioExceptionType.connectionError,
+        );
+      }
+    } on DioException catch (error) {
+      logDebug('updatePet error: $error');
+      throw ApiException.checkException(error);
+    } catch (e, st) {
+      logHandle(e.toString(), st);
+      throw ('Ошибка\nПопробуйте позже');
+    }
+  }
+  
+  @override
+  Future<void> deletePet(String petId) {
+    try {
+      return dio.delete('${AppSecrets.petsUrl}/$petId');
+    } on DioException catch (error) {
+      logDebug('deletePet error: $error');
       throw ApiException.checkException(error);
     } catch (e, st) {
       logHandle(e.toString(), st);
