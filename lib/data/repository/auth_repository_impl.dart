@@ -33,6 +33,8 @@ class AuthRepositoryImpl implements AuthRepository {
             AppConstants.STORAGE_ACCESS_TOKEN, authResponse.accessToken!);
         await StorageServices.setString(
             AppConstants.STORAGE_REFRESH_TOKEN, authResponse.refreshToken!);
+        await StorageServices.setBool(
+            AppConstants.STORAGE_SHOW_ONBOARDING, false);
 
         return authResponse;
       }
@@ -62,6 +64,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthResponse?> refreshToken(String oldToken) async {
+    oldToken = oldToken.replaceFirst('Bearer ', '');
+    logDebug('oldToken: $oldToken');
     try {
       final Response response = await dio.post(
         AppSecrets.refreshTokenUrl,
@@ -70,6 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
           headers: {'Content-Type': 'application/json'},
         ),
       );
+      logDebug('response: ${response.data}');
       final Map<String, dynamic> data = response.data;
       if (response.statusCode == 200 || response.statusCode == 201) {
         AuthResponse authResponse = AuthResponse.fromJson(data);
@@ -95,9 +100,7 @@ class AuthRepositoryImpl implements AuthRepository {
         AppSecrets.googleSignInUrl,
         data: {'token': token},
         options: Options(
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: {'Content-Type': 'application/json'},
         ),
       );
       final Map<String, dynamic> data = response.data;
@@ -108,6 +111,8 @@ class AuthRepositoryImpl implements AuthRepository {
             AppConstants.STORAGE_ACCESS_TOKEN, authResponse.accessToken!);
         await StorageServices.setString(
             AppConstants.STORAGE_REFRESH_TOKEN, authResponse.refreshToken!);
+        await StorageServices.setBool(
+            AppConstants.STORAGE_SHOW_ONBOARDING, false);
 
         return authResponse;
       }

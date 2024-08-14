@@ -16,6 +16,14 @@ class SearchableDropdown extends StatelessWidget {
     this.validator,
   });
 
+  List<SearchFieldListItem<String>> _filterSuggestions(String query) {
+    final lowerCaseQuery = query.toLowerCase().replaceAll('-', '').replaceAll(' ', '');
+    return suggestions.where((item) {
+      final suggestion = item.searchKey.toLowerCase().replaceAll('-', '').replaceAll(' ', '');
+      return suggestion.contains(lowerCaseQuery);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SearchField(
@@ -47,6 +55,9 @@ class SearchableDropdown extends StatelessWidget {
       suggestionState: Suggestion.expand,
       onSuggestionTap: (SearchFieldListItem<String> x) {
         focusNode.unfocus();
+      },
+      onSearchTextChanged: (query) {
+        return _filterSuggestions(query);
       },
     );
   }

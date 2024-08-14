@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:pet_style/core/services/interceptors/auth_interceptor.dart';
+import 'package:pet_style/data/repository/appointment_repository_impl.dart';
 import 'package:pet_style/data/repository/auth_repository_impl.dart';
 import 'package:pet_style/data/repository/pet_repository_impl.dart';
 import 'package:pet_style/data/repository/user_repository_impl.dart';
+import 'package:pet_style/domain/repository/appointment_repository.dart';
 import 'package:pet_style/domain/repository/auth_repository.dart';
 import 'package:pet_style/domain/repository/pet_repository.dart';
 import 'package:pet_style/domain/repository/user_repository.dart';
@@ -36,6 +38,10 @@ class DependencyInjector {
 
     _getIt.registerLazySingleton<PetRepository>(
       () => PetRepositoryImpl(dio: dio),
+    );
+
+    _getIt.registerLazySingleton<AppointmentRepository>(
+      () => AppointmentRepositoryImpl(dio: dio),
     );
 
     _getIt.registerLazySingleton<InternetConnection>(

@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pet_style/blocs/network_bloc/network_bloc.dart';
 import 'package:pet_style/blocs/user/user_bloc.dart';
+import 'package:pet_style/core/helpers/log_helper.dart';
+import 'package:pet_style/core/services/storage_services.dart';
 import 'package:pet_style/core/theme/colors.dart';
 import 'package:pet_style/view/app/home/widgets/appointment_card.dart';
 import 'package:pet_style/view/app/home/widgets/pet_card.dart';
@@ -22,6 +25,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    logDebug(StorageServices.getString('access_token').toString());
+
     super.initState();
     context.read<UserBloc>().add(const FetchUserData(completer: null));
   }
@@ -48,7 +53,36 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           if (state is UserError) {
             return Center(
-              child: Text(state.message),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Что-то пошло не так',
+                    style: const TextStyle(color: AppColors.primaryText)
+                        .copyWith(fontSize: 16),
+                  ),
+                  Text(
+                    'Попробуйте чуть позже',
+                    style: const TextStyle(color: AppColors.primaryText)
+                        .copyWith(fontSize: 10),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      final completer = Completer();
+                      BlocProvider.of<UserBloc>(context)
+                          .add(FetchUserData(completer: completer));
+                      return completer.future;
+                    },
+                    child: const Text(
+                      'Повторить попытку',
+                    ),
+                  ),
+                ],
+              ),
             );
           }
           if (state is UserLoaded) {
@@ -60,58 +94,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   floating: true,
                   backgroundColor: AppColors.primarySecondElement,
                   elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Привет, ${state.user.name}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.primaryText.withOpacity(0.6),
-                                  letterSpacing: 1.2,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: state.user.image != null
-                                  ? NetworkImage(state.user.image ?? '')
-                                  : const AssetImage(
-                                          'assets/images/default_profile.png')
-                                      as ImageProvider),
-                        ),
-                      ],
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: state.user.image != null
+                              ? NetworkImage(state.user.image ?? '')
+                              : const AssetImage(
+                                      'assets/images/default_profile.png')
+                                  as ImageProvider),
                     ),
+                  ],
+                  // text
+                  title: Text(
+                    'Привет, ${state.user.name}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryText.withOpacity(0.6),
+                      letterSpacing: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  bottom: const PreferredSize(
-                      preferredSize: Size.fromHeight(50),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        child: Text(
-                          'P E T  S T Y L E',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primaryText,
-                            letterSpacing: 1.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
+                  centerTitle: false,
                 ),
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
@@ -125,39 +131,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SliverPadding(
                   padding: EdgeInsets.only(top: 10, left: 20, right: 20),
                   sliver: SliverToBoxAdapter(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppointmentCard(
-                          title: 'Запись в салон',
-                          subtitle: 'Премиум уход для вашего любимца',
-                          imageLeft: Image(
-                            image: AssetImage('assets/images/salon2.png'),
-                            height: 30,
-                            width: 30,
-                          ),
-                          imageRight: Image(
-                            image: AssetImage('assets/images/pet1.png'),
-                            height: 100,
-                            width: 100,
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        AppointmentCard(
-                          title: 'Запись домой',
-                          subtitle: 'Индивидуальный уход у груммера дома',
-                          imageLeft: Image(
-                            image: AssetImage('assets/images/paw-print.png'),
-                            height: 30,
-                            width: 30,
-                          ),
-                          imageRight: Image(
-                            image: AssetImage('assets/images/pet2.png'),
-                            height: 100,
-                            width: 100,
-                          ),
-                        ),
-                      ],
+                    child: AppointmentCard(
+                      title: 'Запись на стрижку',
+                      subtitle:
+                          'Кишинёв, Рышкановка, улица Богдана Воевода 2, подъезд 7.',
+                      imageRight: Image(
+                        image: AssetImage('assets/images/pet2.png'),
+                        height: 100,
+                        width: 100,
+                      ),
+                      imageLeft: Image(
+                        image: AssetImage('assets/images/paw-print.png'),
+                        height: 30,
+                        width: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -175,13 +162,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 10),
                         Text(
                           'Мои питомцы',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryElement),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primaryElement,
+                                  ),
                         ),
                       ],
                     ),
@@ -227,13 +213,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 10),
                         Text(
                           'Предстоящие записи',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryElement),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primaryElement,
+                                  ),
                         ),
                       ],
                     ),

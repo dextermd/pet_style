@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
 class AppTheme {
@@ -30,7 +31,7 @@ class AppTheme {
     ),
     splashColor: AppColors.containerBorder.withOpacity(0.1),
     highlightColor: AppColors.containerBorder.withOpacity(0.1),
-    datePickerTheme:   DatePickerThemeData(
+    datePickerTheme: DatePickerThemeData(
       headerBackgroundColor: AppColors.primarySecondElement,
       headerForegroundColor: AppColors.primaryText.withOpacity(0.7),
       backgroundColor: AppColors.primaryBackground,
@@ -46,5 +47,21 @@ class AppTheme {
         backgroundColor: AppColors.primarySecondElement.withOpacity(0.2),
       ),
     ),
+  );
+}
+
+TextStyle get headingStyle {
+  return GoogleFonts.lato(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primaryText.withOpacity(0.8),
+  );
+}
+
+TextStyle get subHeadingStyle {
+  return GoogleFonts.lato(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primaryText.withOpacity(0.6),
   );
 }
