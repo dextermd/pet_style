@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_style/core/helpers/log_helper.dart';
 import 'package:pet_style/core/theme/colors.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -47,10 +46,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
     final String currentUrl = GoRouterState.of(context).uri.toString();
     final List<String> hideBottomNavBarPaths = [
       '/setting',
+      '/home/appointment/phone_verification',
+      '/home/appointment/phone_verification/otp_code',
     ];
-
-    // logDebug('location: $currentUrl');
-    // logDebug('hideBottomNavBarPaths: $hideBottomNavBarPaths');
 
     bool shouldShowBottomNavBar = !hideBottomNavBarPaths.contains(currentUrl);
 

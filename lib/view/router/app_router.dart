@@ -8,6 +8,8 @@ import 'package:pet_style/view/app/auth/sign_in/sign_in_screen.dart';
 import 'package:pet_style/view/app/auth/sign_up/sign_up_screen.dart';
 import 'package:pet_style/view/app/chat/chat_screen.dart';
 import 'package:pet_style/view/app/error/no_internet_screen.dart';
+import 'package:pet_style/view/app/otp/otp_code/otp_code_screen.dart';
+import 'package:pet_style/view/app/otp/phone_verification/phone_verification_screen.dart';
 import 'package:pet_style/view/app/pet_form/pet_form_screen.dart';
 import 'package:pet_style/view/app/onboarding/onboarding_screen.dart';
 import 'package:pet_style/view/app/home/home_screen.dart';
@@ -23,6 +25,7 @@ final bool showOnboarding = StorageServices.getDeviceOnboardingOpen();
 class AppRouter {
   final router = GoRouter(
     initialLocation: '/onboarding',
+    //initialLocation: '/home/appointment/phone_verification',
     routes: [
       GoRoute(
         path: '/onboarding',
@@ -75,9 +78,25 @@ class AppRouter {
                 GoRoute(
                   path: 'appointment',
                   name: 'appointment',
-                  builder: (context, state) =>
-                     const AppointmentScreen(),
+                  builder: (context, state) => const AppointmentScreen(),
                   parentNavigatorKey: _shellNavigatorKey,
+                  routes: [
+                    GoRoute(
+                      path: 'phone_verification',
+                      name: 'phone_verification',
+                      builder: (context, state) =>
+                          const PhoneVerificationScreen(),
+                      routes: [
+                        GoRoute(
+                          path: 'otp_code',
+                          name: 'otp_code',
+                          builder: (context, state) => OtpCodeScreen(
+                            phone: state.extra as String,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ]),
           GoRoute(
@@ -105,7 +124,16 @@ class AppRouter {
       bool isLoggedIn = StorageServices.getIsLoggedIn();
       logDebug(state.matchedLocation);
 
-      final protectedRoutes = ['/home', '/schedule', '/chat', '/setting'];
+      final protectedRoutes = [
+        '/home',
+        '/schedule',
+        '/chat',
+        '/setting',
+        '/appointment',
+        '/pet_form',
+        '/phone_verification',
+        '/home/appointment/phone_verification/opt_code',
+      ];
       if (!isLoggedIn && protectedRoutes.contains(state.matchedLocation)) {
         return '/sign_in';
       }

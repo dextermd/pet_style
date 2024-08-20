@@ -22,12 +22,11 @@ class AppColors {
       149, 132, 112, 1); // Светло-коричневый для вторичного текста
 
   static const Color primaryLinkText =
-      Color.fromRGBO(38, 28, 155, 1); // Светло-коричневый для ссылок
-  static const Color primaryLinkActive =
-      Color.fromRGBO(227, 227, 227, 1.0); 
+      Color.fromRGBO(22, 2, 246, 1); // Светло-коричневый для ссылок
+  static const Color primaryLinkActive = Color.fromRGBO(227, 227, 227, 1.0);
   static const Color primaryHintText =
       Color.fromRGBO(205, 190, 172, 1); // Светло-бежевый для подсказок
-   static const Color whiteText =
+  static const Color whiteText =
       Color.fromRGBO(255, 255, 255, 1); // Светло-бежевый для подсказок
 
   static const Color containerColor =
@@ -47,7 +46,6 @@ class AppColors {
       Color.fromRGBO(32, 138, 36, 1); // Темно-коричневый для статуса OK
   static const Color primaryStatusError =
       Color.fromRGBO(152, 15, 15, 1); // Средне-коричневый для статуса ошибки
-
 
   static const Color primaryTransparent = Colors.transparent; // Прозрачный
 }

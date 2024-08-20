@@ -12,11 +12,14 @@ class MyTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
   final String? errorMsg;
-  final String? Function(String?)? onChanged;
+  final ValueChanged<String>? onChanged;
   final double contentPadding;
   final bool readOnly;
   final int minLines;
   final int maxLines;
+  final TextStyle? style;
+  final int maxLenght;
+  final bool shouldShowCounter;
 
   const MyTextField({
     super.key,
@@ -35,6 +38,12 @@ class MyTextField extends StatelessWidget {
     this.readOnly = false,
     this.minLines = 1,
     this.maxLines = 1,
+    this.style = const TextStyle(
+      color: AppColors.primaryText,
+      fontSize: 13,
+    ),
+    this.maxLenght = 500,
+    this.shouldShowCounter = false,
   });
 
   @override
@@ -51,10 +60,8 @@ class MyTextField extends StatelessWidget {
       readOnly: readOnly,
       minLines: minLines,
       maxLines: maxLines,
-      style: const TextStyle(
-        color: AppColors.primaryText,
-        fontSize: 13,
-      ),
+      style: style,
+      maxLength: maxLenght,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(contentPadding),
         suffixIcon: suffixIcon,
@@ -68,6 +75,17 @@ class MyTextField extends StatelessWidget {
         ),
         errorText: errorMsg,
       ),
+      buildCounter: (BuildContext context,
+          {int? currentLength, bool? isFocused, int? maxLength}) {
+        if (shouldShowCounter) {
+          return Text(
+            '$currentLength/$maxLength',
+            style: const TextStyle(color: Colors.grey),
+          );
+        } else {
+          return null; // Скрываем счетчик
+        }
+      },
     );
   }
 }
