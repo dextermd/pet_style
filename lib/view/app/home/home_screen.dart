@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pet_style/blocs/network_bloc/network_bloc.dart';
 import 'package:pet_style/blocs/user/user_bloc.dart';
 import 'package:pet_style/core/helpers/log_helper.dart';
@@ -25,10 +24,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    logDebug(StorageServices.getString('access_token').toString());
-
     super.initState();
-    context.read<UserBloc>().add(const FetchUserData(completer: null));
+    context.read<UserBloc>().add(const FetchUserData());
+    logDebug(StorageServices.getString('access_token').toString());
+    logDebug(StorageServices.getString('user_id').toString());
   }
 
   @override

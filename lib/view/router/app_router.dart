@@ -111,7 +111,7 @@ class AppRouter {
             parentNavigatorKey: _shellNavigatorKey,
             builder: (context, state) => const ChatScreen(),
           ),
-          GoRoute(
+          GoRoute( 
             path: '/setting',
             name: 'setting',
             builder: (context, state) => const SettingScreen(),

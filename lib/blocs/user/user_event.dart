@@ -8,7 +8,7 @@ sealed class UserEvent extends Equatable {
 class FetchUserData extends UserEvent {
   final Completer? completer;
 
-  const FetchUserData({required this.completer});
+  const FetchUserData({this.completer});
 
   @override
   List<Object?> get props => [completer];

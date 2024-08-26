@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet_style/core/services/storage_services.dart';
 import 'package:pet_style/data/model/pet/pet.dart';
 import 'package:pet_style/data/model/user/user.dart';
 import 'package:pet_style/domain/repository/user_repository.dart';
@@ -18,6 +19,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         final user = await userRepository.getUserData();
         final List<Pet> pets = user?.pets?.toList() ?? [];
         if (user != null) {
+          StorageServices.setString('user_id', user.id ?? '');
           emit(UserLoaded(user, pets));
         } else {
           emit(const UserError('Failed to load user data'));
